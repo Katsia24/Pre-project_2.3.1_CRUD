@@ -35,7 +35,12 @@ public class UserServiceImp implements UserService {
     @Transactional(readOnly = true)
     @Override
     public List<User> listUsers() {
-        //userDao.add(new User("User1firstName", "User1lastName", "Userr1@email"));
-        return userDao.listUsers();
+
+        List<User> users = new ArrayList<User>();
+        users.add(new User("firstNameJava", "lastNameJava", "Java@email"));
+        users.add(new User("userDao.listUsers()", "==", "NULL"));
+        return users;
+
+//        return userDao.listUsers();
     }
 }
