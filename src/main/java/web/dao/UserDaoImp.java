@@ -24,10 +24,11 @@ public class UserDaoImp implements UserDao {
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
         TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
-        return query.getResultList();
-//        List<User> users = new ArrayList<User>();
-//        users.add(new User("firstNameJava", "lastNameJava", "Java@email"));
-//        return users;
+//        return query.getResultList();
+        List<User> users = new ArrayList<User>();
+//        users.add(new User(query.toString(), " this is ", "query.toString()"));
+        users.add(new User("firstNameJava", "lastNameJava", "Java@email"));
+        return users;
     }
 
 }
