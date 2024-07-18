@@ -1,34 +1,41 @@
 package web.dao;
 
-import web.model.User;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import web.model.User;
 
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserDaoImp implements UserDao {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public void add(User user) {
-        sessionFactory.getCurrentSession().save(user);
+        entityManager.persist(user);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    public void update(User user) {
+        entityManager.merge(entityManager.contains(user) ? user : entityManager.merge(user));
+    }
+
+    @Override
+    public void delete(User user) {
+        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
+    }
+
+    @Override
+    public User findById(Long id) {
+        return entityManager.find(User.class, id);
+    }
+
+    @Override
     public List<User> listUsers() {
-        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
-//        return query.getResultList();
-        List<User> users = new ArrayList<User>();
-//        users.add(new User(query.toString(), " this is ", "query.toString()"));
-        users.add(new User("firstNameJava", "lastNameJava", "Java@email"));
-        return users;
+        return entityManager.createQuery("from User", User.class).getResultList();
     }
 
 }

@@ -1,20 +1,22 @@
 package web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import web.dao.UserDao;
 import web.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImp implements UserService {
 
+    private final UserDao userDao;
+
     @Autowired
-    private UserDao userDao;
+    public UserServiceImp(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Transactional
     @Override
@@ -22,26 +24,26 @@ public class UserServiceImp implements UserService {
         userDao.add(user);
     }
 
+    @Transactional
     @Override
     public void delete(User user) {
+        userDao.delete(user);
+    }
 
+    @Transactional
+    @Override
+    public void update(User user) {
+        userDao.update(user);
     }
 
     @Override
-    public void update(User user) {
-
+    public User findById(Long id) {
+        return userDao.findById(id);
     }
-
 
     @Override
     @Transactional(readOnly = true)
     public List<User> listUsers() {
-
-//        List<User> users = new ArrayList<User>();
-//        users.add(new User("firstNameJava", "lastNameJava", "Java@email"));
-//        users.add(new User("userDao.listUsers()", "==", "NULL"));
-//        return users;
-
         return userDao.listUsers();
     }
 }
